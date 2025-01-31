@@ -7,6 +7,7 @@ update_script_from_github() {
     GITHUB_RAW_URL="https://raw.githubusercontent.com/d3vop-llc/auto-secure-linux/refs/heads/main/asl.sh"
     LOCAL_SCRIPT_PATH="$0"  # Get the current script path
     log "Updating script from GitHub..."
+    echo -e "Updating script from GitHub..."
     
     # Use curl to download the latest version from GitHub
     curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"

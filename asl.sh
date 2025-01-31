@@ -243,7 +243,8 @@ select_category() {
         echo -e "5) $CYAN Disk Setup$RESET"
         echo -e "6) $CYAN Encryption$RESET"
         echo -e "7) $CYAN Revert Changes$RESET"
-        echo -e "8) $RED Exit$RESET"
+
+        echo -e "\n8) $RED Exit$RESET"
 
         read -p "Choice: " category_choice
         case $category_choice in

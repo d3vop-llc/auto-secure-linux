@@ -118,12 +118,12 @@ create_non_root_user() {
     read -p "Enter new username: " newuser
     sudo adduser "$newuser"
     sudo usermod -aG sudo "$newuser"
-    log "Created new sudo user: $newuser"
+    log "Created a new sudo user: $newuser"
 }
 
 enable_firewall() {
     log "Enabling UFW Firewall..."
-    sudo apt install ufw -y
+    sudo apt update && sudo apt install ufw -y
     sudo ufw enable
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
@@ -153,20 +153,20 @@ secure_ssh() {
 
 setup_fail2ban() {
     log "Installing and enabling Fail2Ban..."
-    sudo apt install fail2ban -y
+    sudo apt update && sudo apt install fail2ban -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
 }
 
 enable_mac_randomization() {
     log "Enabling MAC address randomization..."
-    sudo apt install macchanger -y
+    sudo apt update && sudo apt install macchanger -y
     sudo macchanger -r eth0
 }
 
 install_tor_vpn() {
     log "Installing Tor and VPN tools..."
-    sudo apt install tor openvpn -y
+    sudo apt update && sudo apt install tor openvpn -y
 }
 
 encrypt_disk() {
@@ -177,7 +177,7 @@ encrypt_disk() {
 
 enable_apparmor() {
     log "Enabling AppArmor..."
-    sudo apt install apparmor apparmor-utils -y
+    sudo apt update && sudo apt install apparmor apparmor-utils -y
     sudo systemctl enable apparmor
     sudo systemctl start apparmor
     log "AppArmor enabled."
@@ -185,7 +185,7 @@ enable_apparmor() {
 
 check_rootkits() {
     log "Checking for rootkits..."
-    sudo apt install chkrootkit rkhunter -y
+    sudo apt update && sudo apt install chkrootkit rkhunter -y
     sudo chkrootkit
     sudo rkhunter --check
     log "Rootkit check completed."
@@ -193,7 +193,7 @@ check_rootkits() {
 
 audit_system_logs() {
     log "Auditing system logs..."
-    sudo apt install auditd -y
+    sudo apt update && sudo apt install auditd -y
     sudo systemctl enable auditd
     sudo systemctl start auditd
     log "System logs being audited."
@@ -201,14 +201,14 @@ audit_system_logs() {
 
 update_security_policies() {
     log "Updating security policies..."
-    sudo apt install aide -y
+    sudo apt update && sudo apt install aide -y
     sudo aideinit
     log "Security policies updated."
 }
 
 enable_automatic_updates() {
     log "Enabling automatic updates..."
-    sudo apt-get install unattended-upgrades apt-listchanges bsd-mailx
+    sudo apt update && sudo apt-get install unattended-upgrades apt-listchanges bsd-mailx
     sudo dpkg-reconfigure --priority=low unattended-upgrades
     sudo dpkg-reconfigure --priority=low apt-listchanges
     sudo dpkg-reconfigure --priority=low bsd-mailx

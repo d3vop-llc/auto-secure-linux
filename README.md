@@ -4,6 +4,10 @@
 
 ## Run via 1 command
 
+<span style="color: red;">THESE COMMANDS ARE NOT WORKING AS OF 1/30/2025 TO PRESENT</span>
+
+<span style="color: red;">Please download the latest .sh file, and run it via your command line.</span>
+
 ### Using the live main branch
 
 Using ***curl***
@@ -29,5 +33,17 @@ wget -qO- https://github.com/d3vop-llc/auto-secure-linux/releases/download/v1/au
 ```
 
 ## Download
+
+Using ***GIT***
+```
+git clone https://github.com/d3vop-llc/auto-secure-linux.git
+cd auto-secure-linux
+sudo mv asl.sh /usr/local/bin/
+chmod +x /usr/local/bin/asl.sh
+cd ..
+rm -rf ./auto-secure-linux
+```
+
+Or
 
 Go to ***binaries*** section of ***releases***, and download the `auto-secure-linux_***version***.sh` file

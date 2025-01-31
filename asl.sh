@@ -10,6 +10,9 @@ update_script_from_github() {
     
     # Use curl to download the latest version from GitHub
     curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"
+
+    sudo rm -rf /usr/local/bin/asl
+    sudo ln -s /usr/local/bin/asl.sh /usr/local/bin/asl
     
     if [ $? -eq 0 ]; then
         log "Script updated successfully from GitHub."

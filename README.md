@@ -1,5 +1,7 @@
 # Auto Secure Linux
 
+![](.github/assets/200d1480-607d-4476-945b-4612fc915b2a.png)
+
 `***version***` is a placeholder for versions in the format of `1.0.0` or `2.24.231`.
 `***version_long***` is a placeholder for versions in the format of `v1.0.0` or `v2.24.231`. It refers to the ***tag*** for the release that contains the `.sh` file download.
 

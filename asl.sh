@@ -179,7 +179,7 @@ revert_changes() {
 }
 
 menu() {
-    show_logo
+    print_logo
     while true; do
         echo -e "\nSelect an option:"
         echo "1) Update System"

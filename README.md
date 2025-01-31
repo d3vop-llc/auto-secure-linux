@@ -1,6 +1,7 @@
 # Auto Secure Linux
 
 `***version***` is a placeholder for versions in the format of `1.0.0` or `2.24.231`.
+`***version_long***` is a placeholder for versions in the format of `v1.0.0` or `v2.24.231`. It refers to the ***tag*** for the release that contains the `.sh` file download.
 
 ## Run via 1 command
 
@@ -24,12 +25,12 @@ wget -qO- https://raw.githubusercontent.com/d3vop-llc/auto-secure-linux/refs/hea
 
 Using ***curl***
 ```
-curl -s https://github.com/d3vop-llc/auto-secure-linux/releases/download/v1/auto-secure-linux_***version***.sh | bash
+curl -s https://github.com/d3vop-llc/auto-secure-linux/releases/download/***version_long***/auto-secure-linux_***version***.sh | bash
 ```
 
 Using ***wget***
 ```
-wget -qO- https://github.com/d3vop-llc/auto-secure-linux/releases/download/v1/auto-secure-linux_***version***.sh | bash
+wget -qO- https://github.com/d3vop-llc/auto-secure-linux/releases/download/***version_long***/auto-secure-linux_***version***.sh | bash
 ```
 
 ## Download

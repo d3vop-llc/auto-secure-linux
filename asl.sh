@@ -3,6 +3,17 @@
 # Security Setup Script for Kali Linux
 # Allows enabling and reverting security features
 
+update_script_from_github() {
+    GITHUB_RAW_URL="https://raw.githubusercontent.com/d3vop-llc/auto-secure-linux/refs/heads/main/asl.sh"
+    LOCAL_SCRIPT_PATH="$0"  # Get the current script path
+    log "Updating script from GitHub..."
+    
+    # Download the latest version from GitHub
+    curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"
+    
+    log "Script updated successfully."
+}
+
 # Color codes for different sections
 RESET="\033[0m"
 BOLD="\033[1m"
@@ -46,6 +57,8 @@ print_logo() {
     echo -e "\n[+] Security Setup Script for Kali Linux"
     echo -e "\n"
 }
+
+update_script_from_github
 
 CONFIG_BACKUP_DIR="$HOME/.auto_secure_linux_backups"
 mkdir -p "$CONFIG_BACKUP_DIR"

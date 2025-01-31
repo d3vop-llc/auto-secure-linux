@@ -3,7 +3,7 @@
 # Security Setup Script for Kali Linux
 # Allows enabling and reverting security features
 
-CONFIG_BACKUP_DIR="$HOME/kali_security_backups"
+CONFIG_BACKUP_DIR="$HOME/.auto_secure_linux_backups"
 mkdir -p "$CONFIG_BACKUP_DIR"
 
 log() {
@@ -83,6 +83,36 @@ encrypt_disk() {
     sudo cryptsetup luksFormat "$disk"
 }
 
+enable_apparmor() {
+    log "Enabling AppArmor..."
+    sudo apt install apparmor apparmor-utils -y
+    sudo systemctl enable apparmor
+    sudo systemctl start apparmor
+    log "AppArmor enabled."
+}
+
+check_rootkits() {
+    log "Checking for rootkits..."
+    sudo apt install chkrootkit -y
+    sudo chkrootkit
+    log "Rootkit check completed."
+}
+
+audit_system_logs() {
+    log "Auditing system logs..."
+    sudo apt install auditd -y
+    sudo systemctl enable auditd
+    sudo systemctl start auditd
+    log "System logs being audited."
+}
+
+update_security_policies() {
+    log "Updating security policies..."
+    sudo apt install aide -y
+    sudo aideinit
+    log "Security policies updated."
+}
+
 revert_changes() {
     log "Reverting changes..."
     for file in "$CONFIG_BACKUP_DIR"/*.bak; do
@@ -108,8 +138,12 @@ menu() {
         echo "8) Enable MAC Randomization"
         echo "9) Install Tor & VPN"
         echo "10) Encrypt Disk"
-        echo "11) Revert Changes"
-        echo "12) Exit"
+        echo "11) Enable AppArmor"
+        echo "12) Check for Rootkits"
+        echo "13) Audit System Logs"
+        echo "14) Update Security Policies"
+        echo "15) Revert Changes"
+        echo "16) Exit"
         read -p "Choice: " choice
 
         case $choice in
@@ -123,8 +157,12 @@ menu() {
             8) enable_mac_randomization ;;
             9) install_tor_vpn ;;
             10) encrypt_disk ;;
-            11) revert_changes ;;
-            12) exit 0 ;;
+            11) enable_apparmor ;;
+            12) check_rootkits ;;
+            13) audit_system_logs ;;
+            14) update_security_policies ;;
+            15) revert_changes ;;
+            16) exit 0 ;;
             *) echo "Invalid option, try again." ;;
         esac
     done

@@ -5,9 +5,11 @@
 
 ## Run via 1 command
 
-<span style="color: red;">THESE COMMANDS ARE NOT WORKING AS OF 1/30/2025 TO PRESENT</span>
+<center>
 
-<span style="color: red;">Please download the latest .sh file, and run it via your command line.</span>
+![](.github/assets/954dd18e-665e-4022-8dd0-974f2791d9cc.png)
+
+</center>
 
 ### Using the live main branch
 

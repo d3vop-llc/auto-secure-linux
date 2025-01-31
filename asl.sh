@@ -179,8 +179,9 @@ enable_apparmor() {
 
 check_rootkits() {
     log "Checking for rootkits..."
-    sudo apt install chkrootkit -y
+    sudo apt install chkrootkit rkhunter -y
     sudo chkrootkit
+    sudo rkhunter --check
     log "Rootkit check completed."
 }
 
@@ -213,6 +214,14 @@ check_accounts_with_root_access() {
     awk -F: '($3 == "0") {print}' /etc/passwd
 }
 
+scan_with_clamav() {
+    log "Scanning system with ClamAV..."
+    sudo apt update && sudo apt install clamav clamav-daemon -y
+    sudo freshclam
+    sudo clamscan -r --bell -i / | tee scan_report.txt
+    log "ClamAV scan completed."
+}
+
 revert_changes() {
     log "Reverting changes..."
     for file in "$CONFIG_BACKUP_DIR"/*.bak; do
@@ -239,13 +248,14 @@ select_category() {
         echo -e "$YELLOW\n--- Network & Security ---$RESET"
         echo -e "3) $BLUE Network Setup$RESET"
         echo -e "4) $BLUE Security Hardening$RESET"
+        echo -e "5) $BLUE Anti-Virus$RESET"
 
         echo -e "$YELLOW\n--- Disk & Encryption ---$RESET"
-        echo -e "5) $CYAN Disk Setup$RESET"
-        echo -e "6) $CYAN Encryption$RESET"
-        echo -e "7) $CYAN Revert Changes$RESET"
+        echo -e "6) $CYAN Disk Setup$RESET"
+        echo -e "7) $CYAN Encryption$RESET"
+        echo -e "8) $CYAN Revert Changes$RESET"
 
-        echo -e "\n8) $RED Exit$RESET"
+        echo -e "\n9) $RED Exit$RESET"
 
         read -p "Choice: " category_choice
         case $category_choice in
@@ -253,10 +263,11 @@ select_category() {
             2) user_management ;;
             3) network_setup ;;
             4) security_hardening ;;
-            5) disk_setup ;;
-            6) encryption_setup ;;
-            7) revert_changes ;;
-            8) exit 0 ;;
+            5) anti_virus ;;
+            6) disk_setup ;;
+            7) encryption_setup ;;
+            8) revert_changes ;;
+            9) exit 0 ;;
             *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
         esac
     done
@@ -339,6 +350,21 @@ security_hardening() {
             3) remove_insecure_services ;;
             4) enable_apparmor ;;
             5) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+anti_virus() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nAnti-Virus$RESET"
+        echo -e "1) $GREEN Scan with ClamAV$RESET"
+        read -p "Choice: " anti_virus_choice
+        case $anti_virus_choice in
+            1) scan_with_clamav ;;
+            2) return ;;
             *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
         esac
     done

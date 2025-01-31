@@ -3,6 +3,12 @@
 # Security Setup Script for Kali Linux
 # Allows enabling and reverting security features
 
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+if [[ ":$PATH:" != *":$SCRIPT_DIR:"* ]]; then
+  export PATH="$PATH:$SCRIPT_DIR"
+  echo "Added $SCRIPT_DIR to PATH"
+fi
+
 log() {
     echo -e "$GREEN[+] $1$RESET"
 }

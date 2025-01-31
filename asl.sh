@@ -3,9 +3,6 @@
 # Security Setup Script for Kali Linux
 # Allows enabling and reverting security features
 
-CONFIG_BACKUP_DIR="$HOME/.auto_secure_linux_backups"
-mkdir -p "$CONFIG_BACKUP_DIR"
-
 # Function to print the logo with color
 print_logo() {
     echo -e "\033[1;37m" # White color for all parts
@@ -39,6 +36,9 @@ print_logo() {
     echo -e "\n"
 }
 
+CONFIG_BACKUP_DIR="$HOME/.auto_secure_linux_backups"
+mkdir -p "$CONFIG_BACKUP_DIR"
+
 log() {
     echo -e "[+] $1"
 }
@@ -49,6 +49,19 @@ backup_file() {
         cp "$file" "$CONFIG_BACKUP_DIR/$(basename $file).bak"
         log "Backed up $file"
     fi
+}
+
+backup_installed_packages() {
+    log "Backing up installed packages..."
+    dpkg --get-selections > "$CONFIG_BACKUP_DIR/packages-backup.txt"
+    log "Installed packages backed up."
+}
+
+restore_installed_packages() {
+    log "Restoring installed packages..."
+    sudo apt-get update
+    sudo apt-get dselect-upgrade < "$CONFIG_BACKUP_DIR/packages-backup.txt"
+    log "Installed packages restored."
 }
 
 update_system() {
@@ -82,6 +95,12 @@ disable_unnecessary_services() {
     log "Disabling unnecessary services..."
     sudo systemctl disable avahi-daemon
     sudo systemctl stop avahi-daemon
+}
+
+remove_insecure_services() {
+    log "Removing insecure services..."
+    sudo apt-get --purge remove xinetd nis yp-tools tftpd atftpd tftpd-hpa telnetd rsh-server rsh-redone-server -y
+    log "Insecure services removed."
 }
 
 secure_ssh() {
@@ -155,10 +174,12 @@ revert_changes() {
             log "Restored $original_file"
         fi
     done
+    restore_installed_packages
     log "Reverted settings to backups."
 }
 
 menu() {
+    show_logo
     while true; do
         echo -e "\nSelect an option:"
         echo "1) Update System"
@@ -166,17 +187,18 @@ menu() {
         echo "3) Create Non-Root User"
         echo "4) Enable Firewall"
         echo "5) Disable Unnecessary Services"
-        echo "6) Secure SSH"
-        echo "7) Install Fail2Ban"
-        echo "8) Enable MAC Randomization"
-        echo "9) Install Tor & VPN"
-        echo "10) Encrypt Disk"
-        echo "11) Enable AppArmor"
-        echo "12) Check for Rootkits"
-        echo "13) Audit System Logs"
-        echo "14) Update Security Policies"
-        echo "15) Revert Changes"
-        echo "16) Exit"
+        echo "6) Remove Insecure Services"
+        echo "7) Secure SSH"
+        echo "8) Install Fail2Ban"
+        echo "9) Enable MAC Randomization"
+        echo "10) Install Tor & VPN"
+        echo "11) Encrypt Disk"
+        echo "12) Enable AppArmor"
+        echo "13) Check for Rootkits"
+        echo "14) Audit System Logs"
+        echo "15) Update Security Policies"
+        echo "16) Revert Changes"
+        echo "17) Exit"
         read -p "Choice: " choice
 
         case $choice in
@@ -185,23 +207,21 @@ menu() {
             3) create_non_root_user ;;
             4) enable_firewall ;;
             5) disable_unnecessary_services ;;
-            6) secure_ssh ;;
-            7) setup_fail2ban ;;
-            8) enable_mac_randomization ;;
-            9) install_tor_vpn ;;
-            10) encrypt_disk ;;
-            11) enable_apparmor ;;
-            12) check_rootkits ;;
-            13) audit_system_logs ;;
-            14) update_security_policies ;;
-            15) revert_changes ;;
-            16) exit 0 ;;
+            6) remove_insecure_services ;;
+            7) secure_ssh ;;
+            8) setup_fail2ban ;;
+            9) enable_mac_randomization ;;
+            10) install_tor_vpn ;;
+            11) encrypt_disk ;;
+            12) enable_apparmor ;;
+            13) check_rootkits ;;
+            14) audit_system_logs ;;
+            15) update_security_policies ;;
+            16) revert_changes ;;
+            17) exit 0 ;;
             *) echo "Invalid option, try again." ;;
         esac
     done
 }
-
-# Print logo before the menu
-print_logo
 
 menu

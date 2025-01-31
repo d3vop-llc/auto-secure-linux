@@ -214,15 +214,27 @@ check_accounts_with_root_access() {
     awk -F: '($3 == "0") {print}' /etc/passwd
 }
 
+install_clamav() {
+    log "Installing ClamAV..."
+    sudo apt update && sudo apt install clamav clamav-daemon -y
+    log "ClamAV installed."
+}
+
 scan_with_clamav() {
     log "Scanning system with ClamAV..."
-    sudo apt update && sudo apt install clamav clamav-daemon -y
-    sudo rm /var/log/clamav/freshclam.log.lock  # Remove lock file if it exists
-    sudo chown clamav:clamav /var/log/clamav/freshclam.log  # Correct ownership
-    sudo chmod 644 /var/log/clamav/freshclam.log  # Ensure readable/writable by clamav
     sudo freshclam
     sudo clamscan -r --bell -i / | tee scan_report.txt
     log "ClamAV scan completed."
+}
+
+fix_clamav() {
+    log "Fixing ClamAV..."
+    sudo rm /var/log/clamav/freshclam.log.lock
+    sudo chown clamav:clamav /var/log/clamav/freshclam.log
+    sudo chmod 644 /var/log/clamav/freshclam.log
+    sudo freshclam
+    sudo systemctl restart clamav-daemon
+    log "ClamAV fixed."
 }
 
 revert_changes() {
@@ -363,11 +375,16 @@ anti_virus() {
         clear
         print_logo
         echo -e "$MAGENTA\nAnti-Virus$RESET"
-        echo -e "1) $GREEN Scan with ClamAV$RESET"
+        echo -e "1) $GREEN Install ClamAV$RESET"
+        echo -e "2) $GREEN Scan with ClamAV$RESET"
+        echo -e "3) $GREEN Fix ClamAV$RESET"
+        echo -e "4) $RED Back to Categories$RESET"
         read -p "Choice: " anti_virus_choice
         case $anti_virus_choice in
-            1) scan_with_clamav ;;
-            2) return ;;
+            1) install_clamav ;;
+            2) scan_with_clamav ;;
+            3) fix_clamav ;;
+            4) return ;;
             *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
         esac
     done

@@ -54,7 +54,7 @@ print_logo() {
     echo -e "                ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                           "
     echo -e "                  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                                "
     echo -e "\033[0m"  # Reset to default color
-    echo -e "\n[+] Security Setup Script for Kali Linux"
+    echo -e "\n[+] Security Setup Script for Linux"
     echo -e "\n"
 }
 

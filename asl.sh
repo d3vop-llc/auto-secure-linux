@@ -165,6 +165,20 @@ update_security_policies() {
     log "Security policies updated."
 }
 
+enable_automatic_updates() {
+    log "Enabling automatic updates..."
+    sudo apt-get install unattended-upgrades apt-listchanges bsd-mailx
+    sudo dpkg-reconfigure --priority=low unattended-upgrades
+    sudo dpkg-reconfigure --priority=low apt-listchanges
+    sudo dpkg-reconfigure --priority=low bsd-mailx
+    log "Automatic updates enabled."
+}
+
+check_accounts_with_root_access() {
+    log "Checking accounts with root access..."
+    awk -F: '($3 == "0") {print}' /etc/passwd
+}
+
 revert_changes() {
     log "Reverting changes..."
     for file in "$CONFIG_BACKUP_DIR"/*.bak; do
@@ -197,8 +211,9 @@ menu() {
         echo "13) Check for Rootkits"
         echo "14) Audit System Logs"
         echo "15) Update Security Policies"
-        echo "16) Revert Changes"
-        echo "17) Exit"
+        echo "16) Check accounts with root access"
+        echo "17) Revert Changes"
+        echo "18) Exit"
         read -p "Choice: " choice
 
         case $choice in
@@ -217,8 +232,9 @@ menu() {
             13) check_rootkits ;;
             14) audit_system_logs ;;
             15) update_security_policies ;;
-            16) revert_changes ;;
-            17) exit 0 ;;
+            16) check_accounts_with_root_access ;;
+            17) revert_changes ;;
+            18) exit 0 ;;
             *) echo "Invalid option, try again." ;;
         esac
     done

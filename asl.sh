@@ -8,10 +8,14 @@ update_script_from_github() {
     LOCAL_SCRIPT_PATH="$0"  # Get the current script path
     log "Updating script from GitHub..."
     
-    # Download the latest version from GitHub
+    # Use curl to download the latest version from GitHub
     curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"
     
-    log "Script updated successfully."
+    if [ $? -eq 0 ]; then
+        log "Script updated successfully from GitHub."
+    else
+        log "Failed to update script from GitHub."
+    fi
 }
 
 # Color codes for different sections

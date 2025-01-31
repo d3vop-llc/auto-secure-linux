@@ -217,6 +217,9 @@ check_accounts_with_root_access() {
 scan_with_clamav() {
     log "Scanning system with ClamAV..."
     sudo apt update && sudo apt install clamav clamav-daemon -y
+    sudo rm /var/log/clamav/freshclam.log.lock  # Remove lock file if it exists
+    sudo chown clamav:clamav /var/log/clamav/freshclam.log  # Correct ownership
+    sudo chmod 644 /var/log/clamav/freshclam.log  # Ensure readable/writable by clamav
     sudo freshclam
     sudo clamscan -r --bell -i / | tee scan_report.txt
     log "ClamAV scan completed."

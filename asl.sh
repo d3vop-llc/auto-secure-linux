@@ -3,6 +3,17 @@
 # Security Setup Script for Kali Linux
 # Allows enabling and reverting security features
 
+# Color codes for different sections
+RESET="\033[0m"
+BOLD="\033[1m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+MAGENTA="\033[35m"
+CYAN="\033[36m"
+WHITE="\033[37m"
+
 # Function to print the logo with color
 print_logo() {
     echo -e "\033[1;37m" # White color for all parts
@@ -40,9 +51,10 @@ CONFIG_BACKUP_DIR="$HOME/.auto_secure_linux_backups"
 mkdir -p "$CONFIG_BACKUP_DIR"
 
 log() {
-    echo -e "[+] $1"
+    echo -e "$GREEN[+] $1$RESET"
 }
 
+# Backup and Restore Functions
 backup_file() {
     local file="$1"
     if [[ -f "$file" ]]; then
@@ -64,6 +76,7 @@ restore_installed_packages() {
     log "Installed packages restored."
 }
 
+# Security Feature Functions
 update_system() {
     log "Updating system packages..."
     sudo apt update && sudo apt full-upgrade -y
@@ -192,52 +205,155 @@ revert_changes() {
     log "Reverted settings to backups."
 }
 
-menu() {
-    print_logo
+# Category Menu Function
+select_category() {
     while true; do
-        echo -e "\nSelect an option:"
-        echo "1) Update System"
-        echo "2) Change Password"
-        echo "3) Create Non-Root User"
-        echo "4) Enable Firewall"
-        echo "5) Disable Unnecessary Services"
-        echo "6) Remove Insecure Services"
-        echo "7) Secure SSH"
-        echo "8) Install Fail2Ban"
-        echo "9) Enable MAC Randomization"
-        echo "10) Install Tor & VPN"
-        echo "11) Encrypt Disk"
-        echo "12) Enable AppArmor"
-        echo "13) Check for Rootkits"
-        echo "14) Audit System Logs"
-        echo "15) Update Security Policies"
-        echo "16) Check accounts with root access"
-        echo "17) Revert Changes"
-        echo "18) Exit"
-        read -p "Choice: " choice
+        clear
+        print_logo
+        echo -e "$MAGENTA\nSelect a category:$RESET"
+        echo -e "$YELLOW--- System Updates ---$RESET"
+        echo -e "1) $GREEN General System Updates$RESET"
+        echo -e "2) $GREEN User Management$RESET"
 
-        case $choice in
-            1) update_system ;;
-            2) change_password ;;
-            3) create_non_root_user ;;
-            4) enable_firewall ;;
-            5) disable_unnecessary_services ;;
-            6) remove_insecure_services ;;
-            7) secure_ssh ;;
-            8) setup_fail2ban ;;
-            9) enable_mac_randomization ;;
-            10) install_tor_vpn ;;
-            11) encrypt_disk ;;
-            12) enable_apparmor ;;
-            13) check_rootkits ;;
-            14) audit_system_logs ;;
-            15) update_security_policies ;;
-            16) check_accounts_with_root_access ;;
-            17) revert_changes ;;
-            18) exit 0 ;;
-            *) echo "Invalid option, try again." ;;
+        echo -e "$YELLOW\n--- Network & Security ---$RESET"
+        echo -e "3) $BLUE Network Setup$RESET"
+        echo -e "4) $BLUE Security Hardening$RESET"
+
+        echo -e "$YELLOW\n--- Disk & Encryption ---$RESET"
+        echo -e "5) $CYAN Disk Setup$RESET"
+        echo -e "6) $CYAN Encryption$RESET"
+        echo -e "7) $CYAN Revert Changes$RESET"
+        echo -e "8) $RED Exit$RESET"
+
+        read -p "Choice: " category_choice
+        case $category_choice in
+            1) general_system_updates ;;
+            2) user_management ;;
+            3) network_setup ;;
+            4) security_hardening ;;
+            5) disk_setup ;;
+            6) encryption_setup ;;
+            7) revert_changes ;;
+            8) exit 0 ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
         esac
     done
 }
 
-menu
+# General system updates function
+general_system_updates() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nGeneral System Updates$RESET"
+        echo -e "1) $GREEN Update System$RESET"
+        echo -e "2) $RED Back to Categories$RESET"
+        read -p "Choice: " update_choice
+        case $update_choice in
+            1) update_system ;;
+            2) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+# User management category
+user_management() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nUser Management$RESET"
+        echo -e "1) $GREEN Create Non-Root User$RESET"
+        echo -e "2) $GREEN Change User Password$RESET"
+        echo -e "3) $RED Back to Categories$RESET"
+        read -p "Choice: " user_choice
+        case $user_choice in
+            1) create_non_root_user ;;
+            2) change_password ;;
+            3) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+# Network setup category
+network_setup() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nNetwork Setup$RESET"
+        echo -e "1) $GREEN Enable Firewall$RESET"
+        echo -e "2) $GREEN Enable Fail2Ban$RESET"
+        echo -e "3) $GREEN Enable MAC Address Randomization$RESET"
+        echo -e "4) $GREEN Install Tor and VPN$RESET"
+        echo -e "5) $RED Back to Categories$RESET"
+        read -p "Choice: " network_choice
+        case $network_choice in
+            1) enable_firewall ;;
+            2) setup_fail2ban ;;
+            3) enable_mac_randomization ;;
+            4) install_tor_vpn ;;
+            5) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+# Security hardening category
+security_hardening() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nSecurity Hardening$RESET"
+        echo -e "1) $GREEN Secure SSH$RESET"
+        echo -e "2) $GREEN Disable Unnecessary Services$RESET"
+        echo -e "3) $GREEN Remove Insecure Services$RESET"
+        echo -e "4) $GREEN Enable AppArmor$RESET"
+        echo -e "5) $RED Back to Categories$RESET"
+        read -p "Choice: " security_choice
+        case $security_choice in
+            1) secure_ssh ;;
+            2) disable_unnecessary_services ;;
+            3) remove_insecure_services ;;
+            4) enable_apparmor ;;
+            5) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+# Disk setup category
+disk_setup() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nDisk Setup$RESET"
+        echo -e "1) $CYAN Encrypt Disk$RESET"
+        echo -e "2) $RED Back to Categories$RESET"
+        read -p "Choice: " disk_choice
+        case $disk_choice in
+            1) encrypt_disk ;;
+            2) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+# Encryption setup category
+encryption_setup() {
+    while true; do
+        clear
+        print_logo
+        echo -e "$MAGENTA\nEncryption Setup$RESET"
+        echo -e "1) $CYAN Set Up LUKS Encryption$RESET"
+        echo -e "2) $RED Back to Categories$RESET"
+        read -p "Choice: " encryption_choice
+        case $encryption_choice in
+            1) encrypt_disk ;;
+            2) return ;;
+            *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
+        esac
+    done
+}
+
+select_category

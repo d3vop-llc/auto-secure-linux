@@ -170,7 +170,7 @@ install_tor_vpn() {
 }
 
 encrypt_disk() {
-    log "Setting up LUKS disk encryption (manual step required)..."
+    echo "Setting up LUKS disk encryption (manual step required)..."
     read -p "Enter the disk to encrypt (e.g., /dev/sdX): " disk
     sudo cryptsetup luksFormat "$disk"
 }

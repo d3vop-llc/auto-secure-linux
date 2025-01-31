@@ -243,6 +243,14 @@ fix_clamav() {
     log "ClamAV fixed."
 }
 
+disable_usb_ports() {
+    log "Disabling USB ports..."
+    sudo modprobe -r usb_storage
+    echo "blacklist usb_storage" | sudo tee /etc/modprobe.d/blacklist-usb-storage.conf
+    sudo update-initramfs -u
+    log "USB ports disabled."
+}
+
 revert_changes() {
     log "Reverting changes..."
     for file in "$CONFIG_BACKUP_DIR"/*.bak; do
@@ -363,14 +371,16 @@ security_hardening() {
         echo -e "2) $GREEN Disable Unnecessary Services$RESET"
         echo -e "3) $GREEN Remove Insecure Services$RESET"
         echo -e "4) $GREEN Enable AppArmor$RESET"
-        echo -e "5) $RED Back to Categories$RESET"
+        echo -e "5) $GREEN Disable USB ports$RESET"
+        echo -e "6) $RED Back to Categories$RESET"
         read -p "Choice: " security_choice
         case $security_choice in
             1) secure_ssh ;;
             2) disable_unnecessary_services ;;
             3) remove_insecure_services ;;
             4) enable_apparmor ;;
-            5) return ;;
+            5) disable_usb_ports ;;
+            6) return ;;
             *) echo -e "$RED Invalid option. Please try again.$RESET" ;;
         esac
     done

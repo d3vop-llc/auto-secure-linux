@@ -6,21 +6,15 @@
 update_script_from_github() {
     GITHUB_RAW_URL="https://raw.githubusercontent.com/d3vop-llc/auto-secure-linux/refs/heads/main/asl.sh"
     LOCAL_SCRIPT_PATH="$0"  # Get the current script path
-    TEMP_SCRIPT_PATH="/tmp/asl_updated.sh"  # Temporary location to save the new script
-
     log "Updating script from GitHub..."
     echo -e "Updating script from GitHub..."
+    
+    # Use curl to download the latest version from GitHub
+    curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"
 
-    # Use curl to download the latest version from GitHub to a temporary location
-    curl -fsSL "$GITHUB_RAW_URL" -o "$TEMP_SCRIPT_PATH"
-
-    # Move the updated script to the original location
-    sudo mv "$TEMP_SCRIPT_PATH" "$LOCAL_SCRIPT_PATH"
-
-    # Update the symbolic link
     sudo rm -rf /usr/local/bin/asl
-    sudo ln -s "$LOCAL_SCRIPT_PATH" /usr/local/bin/asl
-
+    sudo ln -s /usr/local/bin/asl.sh /usr/local/bin/asl
+    
     if [ $? -eq 0 ]; then
         log "Script updated successfully from GitHub."
     else

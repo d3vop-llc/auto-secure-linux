@@ -42,6 +42,16 @@ sudo mv asl.sh /usr/local/bin/
 chmod +x /usr/local/bin/asl.sh
 cd ..
 rm -rf ./auto-secure-linux
+sudo ln -s /usr/local/bin/asl.sh /usr/local/bin/asl
+```
+
+And then run it by typing
+```
+asl
+```
+If that doesn't work, try using
+```
+/usr/local/bin/asl.sh
 ```
 
 Or

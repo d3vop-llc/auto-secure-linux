@@ -10,25 +10,22 @@ if [[ ":$PATH:" != *":$SCRIPT_DIR:"* ]]; then
 fi
 
 log() {
-    echo -e "$GREEN[+] $1$RESET"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') $GREEN[+] $1$RESET"
 }
 
 update_script_from_github() {
     GITHUB_RAW_URL="https://raw.githubusercontent.com/d3vop-llc/auto-secure-linux/refs/heads/main/asl.sh"
     LOCAL_SCRIPT_PATH="$0"  # Get the current script path
     log "Updating script from GitHub..."
-    echo -e "Updating script from GitHub..."
     
     # Use curl to download the latest version from GitHub
-    curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"
-
-    sudo rm -rf /usr/local/bin/asl
-    sudo ln -s /usr/local/bin/asl.sh /usr/local/bin/asl
-    
-    if [ $? -eq 0 ]; then
+    if curl -fsSL "$GITHUB_RAW_URL" -o "$LOCAL_SCRIPT_PATH"; then
+        sudo rm -rf /usr/local/bin/asl
+        sudo ln -s /usr/local/bin/asl.sh /usr/local/bin/asl
         log "Script updated successfully from GitHub."
     else
         log "Failed to update script from GitHub."
+        exit 1
     fi
 }
 

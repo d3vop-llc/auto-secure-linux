@@ -1,12 +1,10 @@
-use std::fs;
 use std::process::Command;
 use toml::Value;
 use dialoguer::{theme::ColorfulTheme, Select};
 
 fn main() {
-    // Read the configuration file
-    let config_content = fs::read_to_string("config.toml")
-        .expect("Failed to read configuration file");
+    // Embed the configuration file
+    let config_content = include_str!("config.toml");
 
     // Parse the configuration file
     let config: Value = config_content.parse::<Value>()

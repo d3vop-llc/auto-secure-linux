@@ -1,2 +1,2 @@
-docker build -t asl-test .
-docker run -it --rm asl-test
+docker build -t ./target/release/auto-secure-linux .
+docker run -it --rm auto-secure-linux

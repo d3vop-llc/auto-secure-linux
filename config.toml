@@ -1,0 +1,3 @@
+[commands]
+option1 = ["echo 'Hello, World!'", "ls -la"]
+option2 = ["date", "uptime"]

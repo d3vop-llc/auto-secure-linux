@@ -1,0 +1,42 @@
+{
+    "categories": [
+        {
+            "name": "Network & Security",
+            "color": "blue",
+            "submenus": [
+                {
+                    "name": "Enable Firewall",
+                    "function": "enable_firewall"
+                },
+                {
+                    "name": "Disable Unnecessary Services",
+                    "function": "disable_unnecessary_services"
+                },
+                {
+                    "name": "Remove Insecure Services",
+                    "function": "remove_insecure_services"
+                },
+                {
+                    "name": "Secure SSH",
+                    "function": "secure_ssh"
+                },
+                {
+                    "name": "Setup Fail2Ban",
+                    "function": "setup_fail2ban"
+                },
+                {
+                    "name": "Enable MAC Randomization",
+                    "function": "enable_mac_randomization"
+                },
+                {
+                    "name": "Install Tor and VPN",
+                    "function": "install_tor_vpn"
+                },
+                {
+                    "name": "Encrypt Disk",
+                    "function": "encrypt_disk"
+                }
+            ]
+        }
+    ]
+}
